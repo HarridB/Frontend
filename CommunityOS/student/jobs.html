@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+    <title>Jobs</title>
+    <style>
+        body {
+            margin: 0;
+            background: #f5f6fa;
+            font-family: Arial, sans-serif;
+            color: #172033;
+        }
+
+        header {
+            background: midnightblue;
+            color: white;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 32px auto;
+            padding: 0 20px 40px;
+        }
+
+        .subtitle {
+            color: #58657d;
+            margin: 8px 0 20px;
+            font-size: 15px;
+        }
+
+        .search-wrap {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-wrap input,
+        .search-wrap select {
+            flex: 1;
+            min-width: 220px;
+            padding: 12px 14px;
+            border: 1px solid #d9deea;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .search-wrap button {
+            border: none;
+            background: midnightblue;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        .job-card {
+            background: white;
+            border: 1px solid #d9deea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 16px 0;
+            box-shadow: 0 4px 12px rgba(20, 30, 60, .06);
+        }
+
+        .job-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .job-card h2 {
+            margin: 0;
+        }
+
+        .job-card p {
+            line-height: 1.6;
+        }
+
+        .job-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .type-remote {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .type-office {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .type-hybrid {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .meta {
+            color: #58657d;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .requirements {
+            margin: 10px 0 0;
+            padding-left: 18px;
+            color: #2c3a4d;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .job-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .inspect-btn {
+            background: #e0f2fe;
+            color: #0f172a;
+        }
+
+        .apply-btn {
+            background: #14532d;
+            color: #fff;
+        }
+
+        .status {
+            color: #58657d;
+            margin: 8px 0 0;
+            font-size: 14px;
+        }
+
+        .empty {
+            color: #58657d;
+            padding: 24px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .modal-card {
+            background: white;
+            width: min(560px, 100%);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+        }
+
+        .close-btn {
+            border: none;
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="Dashboard.html" aria-label="Back to dashboard">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1>Jobs</h1>
+    </header>
+
+    <main>
+        <h2>Jobs for Students</h2>
+        <p class="subtitle">Find student-friendly opportunities ranging from remote roles to office-based jobs.</p>
+
+        <div class="search-wrap">
+            <input id="jobSearch" type="text" placeholder="Search by location, company, or job title" aria-label="Search jobs by location">
+            <select id="jobTypeFilter" aria-label="Filter jobs by job type">
+                <option value="all">All job types</option>
+                <option value="remote">Remote</option>
+                <option value="office">Office</option>
+                <option value="hybrid">Hybrid</option>
+            </select>
+            <button type="button" onclick="searchJobs()">Search</button>
+            <button type="button" class="secondary-btn" onclick="resetFilters()">Reset</button>
+        </div>
+
+        <p id="jobStatus" class="status"></p>
+        <div id="jobList"></div>
+    </main>
+
+    <div id="jobModal" class="modal">
+        <div class="modal-card">
+            <h3 id="jobModalTitle">Job Details</h3>
+            <div id="jobModalContent"></div>
+            <button class="close-btn" type="button" onclick="closeJobModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'communityJobs';
+
+        const DEFAULT_JOBS = [
+            {
+                title: 'Remote Frontend Developer Intern',
+                company: 'Nova Studio',
+                location: 'Remote',
+                type: 'Remote',
+                date: 'Today',
+                description: 'Build responsive web interfaces, work with design systems, and support the launch of student-focused digital products.',
+                requirements: ['HTML, CSS, JavaScript', 'Familiarity with responsive design', 'Good communication and teamwork']
+            },
+            {
+                title: 'Content Writer for Student Programs',
+                company: 'Campus Pulse',
+                location: 'Remote',
+                type: 'Remote',
+                date: 'Today',
+                description: 'Create blog posts, social captions, and campaign copy for student events, announcements, and community stories.',
+                requirements: ['Strong writing skills', 'Attention to detail', 'Ability to meet deadlines']
+            },
+            {
+                title: 'Office Administrative Assistant',
+                company: 'BrightPath Learning',
+                location: 'Lagos',
+                type: 'Office',
+                date: '2 days ago',
+                description: 'Support daily office operations, manage schedules, and help coordinate student services and outreach activities.',
+                requirements: ['Organized and dependable', 'Strong communication skills', 'Comfortable with office tools']
+            },
+            {
+                title: 'Hybrid Data Entry Officer',
+                company: 'ConnectCare Partners',
+                location: 'Abuja',
+                type: 'Hybrid',
+                date: '3 days ago',
+                description: 'Handle data updates, verify records, and assist with reporting while working part-time from home and part-time in the office.',
+                requirements: ['Fast typing and accuracy', 'Attention to detail', 'Basic spreadsheet experience']
+            },
+            {
+                title: 'Customer Support Intern',
+                company: 'EduBridge Solutions',
+                location: 'Remote',
+                type: 'Remote',
+                date: '4 days ago',
+                description: 'Answer student queries, document support tickets, and help improve the online learning experience.',
+                requirements: ['Friendly communication', 'Patience with customers', 'Willingness to learn']
+            },
+            {
+                title: 'IT Support Assistant',
+                company: 'SmartHub Tech',
+                location: 'Port Harcourt',
+                type: 'Office',
+                date: '5 days ago',
+                description: 'Assist with hardware setup, troubleshoot common computer issues, and support team members in the office.',
+                requirements: ['Basic IT troubleshooting', 'Good problem-solving skills', 'Ability to work with a team']
+            }
+        ];
+
+        function escapeText(value) {
+            return String(value || '').replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[character]));
+        }
+
+        function linkifyText(value = '') {
+            const safe = escapeText(value);
+            return safe.replace(/(https?:\/\/[^\s]+|www\.[^\s]+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s]*)?)/gi, match => {
+                const href = /^https?:\/\//i.test(match) ? match : `https://${match}`;
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+            });
+        }
+
+        function normalizeJob(job, index = 0) {
+            const normalized = job || {};
+            const type = normalized.type || inferJobType(normalized.location, normalized.title);
+            const inferredLocation = normalized.location || 'Remote';
+            return {
+                id: normalized.id || `${(normalized.title || 'job').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${index}`,
+                title: normalized.title || 'Untitled Job',
+                company: normalized.company || 'Unknown Company',
+                location: inferredLocation,
+                type,
+                description: normalized.description || 'No description provided yet.',
+                date: normalized.date || 'Recently',
+                requirements: Array.isArray(normalized.requirements) ? normalized.requirements : []
+            };
+        }
+
+        function inferJobType(location, title = '') {
+            const text = `${location} ${title}`.toLowerCase();
+            if (text.includes('remote')) return 'Remote';
+            if (text.includes('hybrid')) return 'Hybrid';
+            return 'Office';
+        }
+
+        function readStoredJobs() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function ensureSeedJobs() {
+            const storedJobs = readStoredJobs();
+
+            if (!storedJobs.length) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_JOBS));
+                return DEFAULT_JOBS.map(normalizeJob);
+            }
+
+            return storedJobs.map(normalizeJob);
+        }
+
+        function getJobs() {
+            return ensureSeedJobs();
+        }
+
+        function getActiveJobType() {
+            return document.getElementById('jobTypeFilter').value || 'all';
+        }
+
+        function searchJobs() {
+            const query = document.getElementById('jobSearch').value.trim().toLowerCase();
+            const typeFilter = getActiveJobType();
+            const jobs = getJobs();
+
+            const filteredJobs = jobs.filter(job => {
+                const searchText = [job.title, job.company, job.location, job.description, job.type, ...(job.requirements || [])]
+                    .join(' ')
+                    .toLowerCase();
+
+                const matchesQuery = !query || searchText.includes(query);
+                const matchesType = typeFilter === 'all' || job.type.toLowerCase() === typeFilter;
+                return matchesQuery && matchesType;
+            });
+
+            renderJobs(filteredJobs);
+        }
+
+        function renderJobs(jobs) {
+            const jobList = document.getElementById('jobList');
+            const status = document.getElementById('jobStatus');
+
+            if (!jobs.length) {
+                jobList.innerHTML = '<p class="empty">No jobs match your search right now. Try another keyword or change the job type.</p>';
+                status.textContent = 'Showing 0 job results.';
+                return;
+            }
+
+            jobList.innerHTML = jobs.map(job => `
+                <article class="job-card">
+                    <div class="job-header">
+                        <h2>${escapeText(job.title)}</h2>
+                        <span class="job-type type-${job.type.toLowerCase()}">${escapeText(job.type)}</span>
+                    </div>
+                    <div class="meta">${escapeText(job.company)} • ${escapeText(job.location || 'Remote')} • Posted ${escapeText(job.date || 'Recently')}</div>
+                    <p>${linkifyText(job.description)}</p>
+                    ${job.requirements.length ? `<ul class="requirements">${job.requirements.map(item => `<li>${escapeText(item)}</li>`).join('')}</ul>` : ''}
+                    <div class="job-actions">
+                        <button class="inspect-btn" type="button" onclick="inspectJob('${job.id.replace(/'/g, "\\'")}' )">Inspect Job</button>
+                        <button class="apply-btn" type="button" onclick="applyToJob('${job.id.replace(/'/g, "\\'")}' )">Apply</button>
+                    </div>
+                </article>
+            `).join('');
+
+            status.textContent = `Showing ${jobs.length} student-friendly job${jobs.length > 1 ? 's' : ''}.`;
+        }
+
+        function findJobById(id) {
+            const jobs = getJobs();
+            return jobs.find(job => job.id === id);
+        }
+
+        function inspectJob(id) {
+            const job = findJobById(id);
+            if (!job) {
+                alert('This job is no longer available.');
+                return;
+            }
+
+            const requirementsHtml = job.requirements.length
+                ? `<ul class="requirements">${job.requirements.map(item => `<li>${escapeText(item)}</li>`).join('')}</ul>`
+                : '<p>No specific requirements listed.</p>';
+
+            document.getElementById('jobModalTitle').textContent = job.title;
+            document.getElementById('jobModalContent').innerHTML = `
+                <p><strong>Company:</strong> ${escapeText(job.company)}</p>
+                <p><strong>Location:</strong> ${escapeText(job.location || 'Remote')}</p>
+                <p><strong>Job Type:</strong> ${escapeText(job.type)}</p>
+                <p><strong>Posted:</strong> ${escapeText(job.date || 'Recently')}</p>
+                <p><strong>Description:</strong><br>${linkifyText(job.description)}</p>
+                <p><strong>Requirements:</strong></p>
+                ${requirementsHtml}
+                <div class="job-actions">
+                    <button class="apply-btn" type="button" onclick="applyToJob('${job.id.replace(/'/g, "\\'")}')">Apply to this job</button>
+                </div>
+            `;
+            document.getElementById('jobModal').style.display = 'flex';
+        }
+
+        function applyToJob(id) {
+            const job = findJobById(id);
+            if (!job) {
+                alert('This job has been removed or is no longer available.');
+                return;
+            }
+
+            const name = prompt(`Apply for ${job.title}?\n\nEnter your full name to continue:`, '');
+            if (!name || !name.trim()) {
+                return;
+            }
+
+            alert(`Application started for ${job.title} at ${job.company}.\n\nWe will contact you via your registered email address.`);
+        }
+
+        function resetFilters() {
+            document.getElementById('jobSearch').value = '';
+            document.getElementById('jobTypeFilter').value = 'all';
+            renderJobs(getJobs());
+        }
+
+        function closeJobModal() {
+            document.getElementById('jobModal').style.display = 'none';
+        }
+
+        document.getElementById('jobSearch').addEventListener('input', searchJobs);
+        document.getElementById('jobTypeFilter').addEventListener('change', searchJobs);
+
+        renderJobs(getJobs());
+    </script>
+</body>
+</html>

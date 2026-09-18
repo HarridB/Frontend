@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="..bootstrap/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+    <title>Announcement</title>
+    <style>
+          *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body{
+            background: darkgray;
+            font-family: comic sans, ms;
+            margin: 0;
+            color: thistle;
+        }
+
+        .navbar-brand-name{
+            background: linear-gradient(90deg, #2f2f2f, #4a4a4a);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .nav-left{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .nav-right{
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+
+        .icon-box{
+            position: relative;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .badge{
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: red;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .user-profile{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            min-width: 0;
+        }
+
+        .user-profile img{
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info{
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .user-info .name{
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info small{
+            color: #ddd;
+        }
+
+        .logo-img{
+            width: 50px;
+            height: 50px;
+        }
+
+        .logo-text{
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        .search-container{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 350px;
+            min-width: 0;
+            justify-content: center;
+        }
+
+        .search-box{
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 30px;
+            padding: 8px 15px;
+            width: 100%;
+            max-width: 420px;
+            min-width: 0;
+        }
+
+        .btn{
+            border-radius: 16px;
+            white-space: nowrap;
+        }
+
+        .search-box i{
+            color: #6b7280;
+            margin-right: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .search-box input{
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            background: transparent;
+            min-width: 0;
+        }
+
+        .menu-btn{
+            width: 35px;
+            cursor: pointer;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .menu-btn span{
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: white;
+            margin: 6px 0;
+            border-radius: 5px;
+        }
+
+        .sidebar{
+            position: fixed;
+            top: 75px;
+            left: -100%;
+            width: 280px;
+            max-width: 280px;
+            height: calc(100vh - 75px);
+            background: #222;
+            border-radius: 0 0 18px 0;
+            transition: left 0.3s ease;
+            padding-top: 60px;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar a{
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin: 8px 12px;
+            transition: background 0.2s ease;
+            gap: 10px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active{
+            background: linear-gradient(90deg, #3969cf, #55cfc1);
+            color: white;
+        }
+
+        .sidebar.active{
+            left: 0;
+        }
+
+        .page-title{
+            color: #111827;
+            font-weight: 700;
+        }
+
+        .user-profile{
+            position: relative;
+        }
+
+        .user-dropdown{
+            position: absolute;
+            top: 60px;
+            right: 0;
+
+            width: 220px;
+            background: white;
+            color: #111827;
+
+            border-radius: 15px;
+            padding: 10px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+            display: none;
+            z-index: 2000;
+        }
+
+        .user-dropdown.active{
+            display: block;
+        }
+
+        .user-dropdown a{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 12px;
+            border-radius: 10px;
+
+            color: #333;
+            text-decoration: none;
+        }
+
+        .user-dropdown a:hover{
+            background: #f1f5f9;
+        }
+
+        .dorpdown-header{
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-header small{
+            color: #777;
+        }
+
+        .user-dropdown hr{
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .container{
+             background: linear-gradient(90deg, rgb(87, 33, 87), #275853);
+             border-radius: 12px;
+             padding: 18px;
+             margin: 20px 12px;
+             color: white;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar -->
+
+        <nav class="navbar-brand-name">
+            <!-- Left -->
+            <div class="nav-left">
+             <div class="menu-btn" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+       </div>
+
+            <img src="" class="logo-img" alt="logo">
+
+            <h3 class="logo-text">Student OS</h3>
+      </div>
+
+          <!--Center -->
+
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input class="input" placeholder="search for services, people, posts...">
+                </div>
+            <button class="btn btn-primary">Search</button>
+            </div>
+
+            <div class="nav-right">
+
+                <!-- User profile -->
+                 <div class="user-profile" onclick="toggleUserMenu()">
+
+                    <img src="profile.jpg" alt="profile">
+
+                    <div class="user-info">
+                        <span class="name">John Doe</span>
+                        <small>Resident</small>
+                    </div>
+
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+
+                        <div class="dropdown-header">
+                            <strong>John Doe</strong>
+                            <small>Resident</small>
+
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                My Profile
+                            </a>
+
+                            <a href="#">
+                                <i class="fas fa-gear"></i>
+                                Settings
+                            </a>
+
+                            <a href="#">
+                                <i class="fas fa-bell"></i>
+                                Notification
+                            </a>
+
+                            <hr>
+
+                            <a href="login.html">
+                                <i calss="fas fa-right-from-bracket"></i>
+                                Logout
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                 </div>
+        </nav>
+
+        <!-- Sidebar-->
+        <div class="sidebar active" id="sidebar">
+            <a href="index.html">
+                <i class="fa-solid fa-home"></i>
+                Dashboard
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-bullhorn"></i>
+                Announcement
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-bank"></i> 
+                Faculty
+            </a>
+            <a href="#">
+                <i class="fas fa-chalkboard-teacher"></i> 
+                Lecturers
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-info-circle"></i> 
+                About School
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-house"></i> 
+                Hostel Management
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-shopping-cart"></i> 
+                 Student Marketplace
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-calendar-days"></i> 
+                Events
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-briefcase"></i> 
+                Jobs
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-bus"></i> 
+                Transport
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-file-invoice"></i> 
+                Bills & Reminder
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-chart-line"></i> 
+                Reports
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-gear"></i> 
+                Settings
+            </a>
+            <div class="container">
+                <p>Make your community a better place</p>
+              Report issues, share ideas and help build a better place for everyone.
+
+                <a href="#">
+                    <i class="fa-solid fa-bullhorn"></i> 
+                    Report an issue
+                </a>
+            </div>
+        </div>
+
+        <!--Content -->
+
+        <!-- Script -->
+         <script>
+            function toggleSidebar() {
+                document.getElementById("sidebar").classList.toggle("active");
+            }
+
+            function toggleUserMenu() {
+                document.getElementById("userDropdown").classList.toggle("active");
+            }
+         </script>
+</body>
+</html>

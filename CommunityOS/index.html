@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+
+    <title>Student OS | Campus Life Made Easier</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Comic sans ms;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #181818;
+            padding: 15px 6%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-link {
+            color: #ddd !important;
+            margin: 0 8px;
+            transition: .3s;
+        }
+
+        .nav-link:hover {
+            color: #55cfc1 !important;
+        }
+
+        .login-btn {
+            border: 1px solid #55cfc1;
+            color: white;
+            border-radius: 25px;
+            padding: 8px 18px;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+
+        .login-btn:hover {
+            background: #55cfc1;
+            color: #111;
+        }
+
+        .create-btn {
+            background: linear-gradient(90deg, #3969cf, #55cfc1);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 9px 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 8px 20px rgba(57, 105, 207, .3);
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            padding: 80px 7%;
+            background:
+                radial-gradient(circle at top right,
+                rgba(85, 207, 193, .25),
+                transparent 35%),
+                linear-gradient(135deg, #101820, #1d2940);
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, #55cfc1, #5b83e8);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.7;
+            color: #d7dce5;
+            max-width: 580px;
+        }
+
+        .hero-buttons {
+            margin-top: 35px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-primary {
+            background: linear-gradient(90deg, #3969cf, #55cfc1);
+            color: white;
+            padding: 13px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hero-secondary {
+            border: 1px solid #aaa;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .hero-primary:hover,
+        .hero-secondary:hover {
+            color: white;
+        }
+
+
+        /* ================= HERO MOCKUP ================= */
+
+        .dashboard-preview {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .3);
+            transform: rotate(2deg);
+        }
+
+        .preview-navbar {
+            height: 45px;
+            background: #202020;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preview-welcome {
+            background: linear-gradient(90deg, #572157, #275853);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .preview-welcome h4 {
+            margin: 0;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .preview-card {
+            height: 90px;
+            background: #f1f3f7;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 7px;
+            color: #3969cf;
+        }
+
+        .preview-card i {
+            font-size: 23px;
+        }
+
+        .preview-card small {
+            color: #555;
+        }
+
+
+        /* ================= FEATURES ================= */
+
+        .section {
+            padding: 90px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .section-title h2 {
+            font-size: 40px;
+            font-weight: 750;
+        }
+
+        .section-title p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            height: 100%;
+            border: 1px solid #e5e7eb;
+            transition: .3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .purple {
+            background: #f0e8ff;
+            color: #7435d5;
+        }
+
+        .green {
+            background: #e5f8eb;
+            color: #20b653;
+        }
+
+        .blue {
+            background: #e8f0ff;
+            color: #2166d1;
+        }
+
+        .red {
+            background: #ffe9e9;
+            color: #e32d3d;
+        }
+
+        .cyan {
+            background: #e2f8f7;
+            color: #16b9b1;
+        }
+
+        .feature-card h4 {
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+
+        /* ================= ABOUT ================= */
+
+        .about {
+            background: #181818;
+            color: white;
+        }
+
+        .about-box {
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .about-box h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .about-box p {
+            color: #c7c7c7;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+
+        /* ================= CTA ================= */
+
+        .cta {
+            margin: 80px 7%;
+            padding: 60px 30px;
+            text-align: center;
+            border-radius: 25px;
+            color: white;
+            background: linear-gradient(90deg, #3969cf, #55cfc1);
+        }
+
+        .cta h2 {
+            font-size: 40px;
+            font-weight: 750;
+        }
+
+        .cta p {
+            font-size: 17px;
+            margin-bottom: 25px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: white;
+            color: #275853;
+            padding: 13px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #101010;
+            color: #aaa;
+            padding: 30px 7%;
+            text-align: center;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 991px) {
+
+            .navbar-nav {
+                padding: 15px 0;
+            }
+
+            .nav-actions {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+
+            .hero {
+                text-align: center;
+            }
+
+            .hero-content {
+                margin: auto;
+            }
+
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .dashboard-preview {
+                margin-top: 60px;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .hero {
+                padding: 60px 5%;
+            }
+
+            .section {
+                padding: 65px 5%;
+            }
+
+            .section-title h2,
+            .about-box h2,
+            .cta h2 {
+                font-size: 30px;
+            }
+
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta {
+                margin: 50px 5%;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg">
+
+    <div class="container-fluid">
+
+        <a href="#" class="brand">
+            <img src="images/StudentBridge.png" alt="Student Bridge Logo">
+            Student Bridge
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent">
+
+            <i class="fa-solid fa-bars text-white"></i>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#features">Features</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+
+            </ul>
+
+
+            <div class="nav-actions">
+
+                <!-- Existing users -->
+                <a href="login.html" class="login-btn">
+                    Login
+                </a>
+
+                <!-- NEW ACCOUNT BUTTON -->
+                <a href="signup.html" class="create-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Account
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div class="container-fluid">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-7">
+
+                <div class="hero-content">
+
+                    <div class="hero-badge">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        Your Campus. One Platform.
+                    </div>
+
+                    <h1>
+                        Everything you need,
+                        <span>all in one place.</span>
+                    </h1>
+
+                    <p>
+                        Student Bridge brings your campus life together.
+                        Stay updated with announcements, explore your
+                        faculty, find hostels, shop with students,
+                        discover jobs and much more.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="signup.html" class="hero-primary">
+                            <i class="fa-solid fa-user-plus"></i>
+                            Create Your Account
+                        </a>
+
+                        <a href="#features" class="hero-secondary">
+                            Explore Features
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Dashboard Preview -->
+
+            <div class="col-lg-5">
+
+                <div class="dashboard-preview">
+
+                    <div class="preview-navbar"></div>
+
+                    <div class="preview-welcome">
+
+                        <h4>
+                            Good Morning, Joshua 👋🏾
+                        </h4>
+
+                        <small>
+                            Here's what's happening on campus today.
+                        </small>
+
+                    </div>
+
+
+                    <div class="preview-grid">
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <small>News</small>
+                        </div>
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <small>Faculty</small>
+                        </div>
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-house"></i>
+                            <small>Hostel</small>
+                        </div>
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <small>Market</small>
+                        </div>
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <small>Jobs</small>
+                        </div>
+
+                        <div class="preview-card">
+                            <i class="fa-solid fa-calendar"></i>
+                            <small>Events</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="section" id="features">
+
+    <div class="section-title">
+
+        <h2>
+            Built around student life
+        </h2>
+
+        <p>
+            Student OS connects the services students use
+            every day into one simple platform.
+        </p>
+
+    </div>
+
+
+    <div class="container-fluid">
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon purple">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+
+                    <h4>Announcements</h4>
+
+                    <p>
+                        Never miss important campus updates,
+                        notices and announcements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon blue">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+
+                    <h4>Faculty & Departments</h4>
+
+                    <p>
+                        Quickly find your faculty, department
+                        and academic information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon green">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+
+                    <h4>Hostel Management</h4>
+
+                    <p>
+                        Access hostel-related information
+                        and services from one location.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon red">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+
+                    <h4>Student Marketplace</h4>
+
+                    <p>
+                        Buy and sell useful items within
+                        your student community.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon cyan">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+
+                    <h4>Jobs & Opportunities</h4>
+
+                    <p>
+                        Discover jobs and opportunities
+                        available for students.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon blue">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+
+                    <h4>Campus Events</h4>
+
+                    <p>
+                        Keep track of upcoming events,
+                        activities and campus programs.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= ABOUT ================= -->
+
+<section class="section about" id="about">
+
+    <div class="about-box">
+
+        <h2>
+            One campus. One community.
+        </h2>
+
+        <p>
+            Student OS is designed to make everyday student
+            life easier by putting important campus services,
+            information and opportunities in one place.
+        </p>
+
+        <p>
+            Instead of jumping between different platforms,
+            students can access what they need from one
+            centralized student environment.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta" id="contact">
+
+    <h2>
+        Ready to join Student Bridge?
+    </h2>
+
+    <p>
+        Create your account and start exploring your
+        campus community.
+    </p>
+
+    <a href="signup.html" class="cta-btn">
+
+        <i class="fa-solid fa-user-plus"></i>
+        Create Account
+
+    </a>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 <strong>Student Bridge</strong>.
+        Built for students, powered by community.
+        <p>Built by Joshua Nnakude, CMP2307633.</p>
+    </p>
+
+</footer>
+
+
+
+<!-- Bootstrap JS -->
+
+<script src="bootstrap/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

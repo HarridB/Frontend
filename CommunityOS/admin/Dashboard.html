@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+<title>Admin Portal</title>
+<style>
+     :root {
+      --bg: #f8fafc;
+      --card: #fff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #1e3a8a;
+      --accent: #22c55e;
+      --border: #e2e8f0;
+      }
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+      }
+  
+      * { 
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+       font-family: system-ui, sans-serif; 
+       }
+
+       body { 
+       background: var(--bg); 
+       color: var(--text); 
+       }
+  
+  /* TOPBAR */
+      .topbar {
+       position: fixed; 
+       top: 0; 
+       left: 0; 
+       right: 0;
+       height: 64px; 
+       background: var(--card); 
+       border-bottom: 1px solid var(--border);
+       display: flex; 
+       align-items: center; 
+       justify-content: space-between;
+       padding: 0 20px; 
+       z-index: 1000;
+       }
+
+      .left { 
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+      }
+
+      .hamburger { 
+        font-size: 24px; 
+        background: none; 
+        border: none; 
+        cursor: pointer; 
+        color: var(--text); 
+       }
+
+      .logo { 
+        font-weight: 700; 
+        font-size: 18px; 
+        color: var(--primary); 
+       }
+  
+      .top-actions { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+       }
+
+       .btn { 
+        padding: 8px 14px; 
+        border-radius: 8px; 
+        border: none; 
+        cursor: pointer; 
+        font-weight: 500; 
+       }
+
+       .btn-green { 
+        background: var(--accent); 
+        color: white; 
+       }
+
+      .btn-announce { 
+        background: var(--primary); 
+        color: white; 
+       }
+
+      .btn-hostel { 
+        background: var(--muted); 
+        color: white;
+       }
+
+       .icon-btn { 
+        background: none; 
+        border: none; 
+        font-size: 20px; 
+        cursor: pointer; 
+        color: var(--text); 
+       }
+  
+       .profile { 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        cursor: pointer; 
+        position: relative; 
+       }
+
+        .profile img { 
+          width: 36px; 
+          height: 36px; 
+          border-radius: 50%; 
+        }
+
+       .dropdown {
+          position: absolute; 
+          top: 45px; 
+          right: 0; 
+          background: var(--card);
+          border: 1px solid var(--border); 
+          border-radius: 8px; 
+          display: none;
+          min-width: 160px; 
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .dropdown a { 
+          display: block; 
+          padding: 10px 15px; 
+          text-decoration: none; 
+          color: var(--text); 
+        }
+        .dropdown a:hover { 
+          background: var(--bg); 
+        }
+  
+  /* SIDEBAR */
+        .sidebar {
+          position: fixed; 
+          top: 64px; 
+          left: 0; 
+          bottom: 0;
+          width: 240px; 
+          background: var(--card); 
+          border-right: 1px solid var(--border);
+          padding: 20px 0; 
+          transition: 0.3s; 
+          z-index: 999;
+         }
+
+        .sidebar a {
+           display: block; 
+           padding: 12px 20px; 
+           color: var(--muted); 
+           text-decoration: none;
+          }
+
+        .sidebar a.active, 
+        .sidebar a:hover { 
+          background: var(--bg); 
+          color: var(--primary); 
+          font-weight: 600; 
+          }
+
+         .sidebar.closed { 
+          left: -240px; 
+          }
+  
+  /* MAIN */
+         .main { 
+          margin-top: 64px; 
+          margin-left: 240px; 
+          padding: 20px; 
+          transition: 0.3s; 
+          }
+
+        .main.full { 
+          margin-left: 0; 
+          }
+
+        .page { 
+          display: none; 
+          }
+
+        .page.active { 
+          display: block; 
+          }
+  
+        .card { 
+          background: var(--card); 
+          padding: 20px; 
+          border-radius: 12px; 
+          border: 1px solid var(--border); 
+          margin-bottom: 20px; 
+          }
+
+        .stats { 
+          display: grid; 
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+          gap: 15px; 
+          }
+
+        .stat { 
+          padding: 15px; 
+          border-radius: 10px; 
+          background: var(--bg); 
+          }
+  
+         table { 
+          width: 100%; 
+          border-collapse: collapse; 
+          margin-top: 10px; 
+          }
+
+         th, td { 
+          padding: 12px; 
+          text-align: left; 
+          border-bottom: 1px solid var(--border); 
+          font-size: 14px;
+          }
+  
+          input, select, textarea { 
+          width: 100%; 
+          padding: 10px; 
+          border: 1px solid var(--border); 
+          border-radius: 8px; 
+          background: var(--bg); 
+          color: var(--text); 
+          margin-top: 5px; 
+          }
+
+        .btn-danger {
+          background: #dc2626;
+          color: #fff;
+        }
+
+        .hostel-list {
+          display: grid;
+          gap: 14px;
+        }
+
+        .hostel-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 16px;
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          background: var(--bg);
+        }
+
+        .hostel-main {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex: 1;
+        }
+
+        .hostel-main strong {
+          font-size: 1.05rem;
+        }
+
+        .hostel-main span,
+        .hostel-main small {
+          color: var(--muted);
+        }
+
+        .hostel-actions {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .empty-state {
+          padding: 18px;
+          border: 1px dashed var(--border);
+          border-radius: 10px;
+          color: var(--muted);
+          background: var(--bg);
+        }
+  
+        @media(max-width: 768px) {
+         .sidebar { 
+          left: -240px; 
+          }
+         .sidebar:not(.closed) { 
+          left: 0; 
+         }
+         .main { 
+          margin-left: 0; 
+         }
+       }
+</style>
+</head>
+<body data-theme="light">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="left">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="logo">Admin Dashboard</div>
+  </div>
+  
+  <div style="display:flex; gap:10px;">
+    <button class="btn btn-announce" onclick="showModal('announceModal')">+ Announcement</button>
+    <button class="btn btn-green" onclick="showModal('jobModal')">+ Post Job</button>
+    <button class="btn btn-hostel" onclick="showModal('hostelModal')">+ Post Hostel</button>
+  </div>
+  
+  <div class="top-actions">
+    <button class="icon-btn" onclick="toggleTheme()">
+		<i class="fas fa-sun"></i>
+	</button>
+    <button class="icon-btn">
+		<i class="fas fa-bell"></i>
+	</button>
+    <div class="profile" onclick="toggleDropdown()">
+      <span>Admin</span>
+      <img src="https://i.pravatar.cc/40" alt="admin">
+      <span>
+		<i class="fas fa-chevron-down"></i>
+	  </span>
+      <div class="dropdown" id="profileDropdown">
+        <a href="#">My Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="#" class="active" onclick="showPage('dashboard', event)">Dashboard</a>
+  <a href="#" onclick="showPage('announcements', event)">Announcements</a>
+  <a href="#" onclick="showPage('jobs', event)">Jobs</a>
+  <a href="#" onclick="showPage('transport', event)">Transport</a>
+  <a href="#" onclick="showPage('fees', event)">Fee Payments</a>
+  <a href="#" onclick="showPage('payments', event)">View Payments</a>
+  <a href="#" onclick="showPage('hostels', event)">View Hostels</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="main">
+  
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="page active">
+    <h2>Dashboard</h2>
+    <div class="stats">
+      <div class="stat"><h4>Total Students</h4><h2>2,340</h2></div>
+      <div class="stat"><h4>Pending Fees</h4><h2>₦21.5M</h2></div>
+      <div class="stat"><h4>Active Buses</h4><h2>12</h2></div>
+      <div class="stat"><h4>New Job Posts</h4><h2>8</h2></div>
+    </div>
+  </div>
+  
+  <!-- ANNOUNCEMENTS -->
+  <div id="announcements" class="page">
+    <h2>Announcements</h2>
+    <div class="card">
+      <table>
+        <tr><th>Title</th><th>Audience</th><th>Date</th><th>Status</th><th>Action</th></tr>
+        <tbody id="announcementRows"></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- JOBS -->
+  <div id="jobs" class="page">
+    <h2>Jobs for Students</h2>
+    <div class="card">
+      <table>
+        <tr><th>Job Title</th><th>Company</th><th>Deadline</th><th>Applications</th><th>Action</th></tr>
+        <tbody id="jobRows"></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- HOSTELS -->
+  <div id="hostels" class="page">
+    <h2>Posted Hostels</h2>
+    <div class="card">
+      <div id="hostelList" class="hostel-list"></div>
+    </div>
+  </div>
+
+  <!-- TRANSPORT -->
+  <div id="transport" class="page">
+    <h2>Transportation Management</h2>
+    <div class="card">
+      <table>
+        <tr><th>Bus No</th><th>Driver</th><th>Route</th><th>Status</th></tr>
+        <tr><td>BUS-01</td><td>Mr John</td><td>Campus <-> Town</td><td>On Trip</td></tr>
+      </table>
+    </div>
+  </div>
+  
+  <!-- FEES -->
+  <div id="fees" class="page">
+    <h2>Faculty & Departmental Fees</h2>
+    <div class="card">
+      <table>
+        <tr><th>Student</th><th>Faculty</th><th>Dept</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+        <tr><td>Chinedu Oka</td><td>Science</td><td>CS</td><td>₦20,000</td><td>₦0</td><td>Paid</td></tr>
+      </table>
+    </div>
+  </div>
+  
+  <!-- PAYMENTS -->
+  <div id="payments" class="page">
+    <h2>Payments Ledger</h2>
+    <div class="card">
+      <table>
+        <tr><th>TXN ID</th><th>Student</th><th>Amount</th><th>Type</th><th>Date</th></tr>
+        <tr><td>TXN78291</td><td>Chinedu Oka</td><td>₦20,000</td><td>Dept Fee</td><td>22-Aug-2026</td></tr>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- MODALS -->
+<div id="announceModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Create Announcement</h3>
+    <form onsubmit="publishAnnouncement(event)">
+    <label>Title</label><input id="announcementTitle" type="text" required>
+    <label>Message</label><textarea id="announcementMessage" rows="4" required></textarea>
+    <label>Audience</label>
+    <select id="announcementAudience"><option>All Students</option><option>Faculty</option></select>
+    <div style="margin-top:15px; display:flex; gap:10px;">
+      <button class="btn btn-green" type="submit">Publish</button>
+      <button class="btn" onclick="closeModal('announceModal')">Cancel</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div id="jobModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Post New Job</h3>
+    <form onsubmit="publishJob(event)">
+    <label>Job Title</label><input id="jobTitle" type="text" required>
+    <label>Company</label><input id="jobCompany" type="text" required>
+    <label>Location</label><input id="jobLocation" type="text" placeholder="e.g. Lagos, Abuja, Remote" required>
+    <label>Job Type</label>
+    <select id="jobType">
+      <option value="Remote">Remote</option>
+      <option value="Office">Office</option>
+      <option value="Hybrid">Hybrid</option>
+    </select>
+    <label>Description</label><textarea id="jobDescription" rows="3" required></textarea>
+    <label>Requirements</label><textarea id="jobRequirements" rows="3" placeholder="Add one requirement per line"></textarea>
+    <div style="margin-top:15px; display:flex; gap:10px;">
+      <button class="btn btn-green" type="submit">Post Job</button>
+      <button class="btn" type="button" onclick="closeModal('jobModal')">Cancel</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div id="editAnnouncementModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Edit Announcement</h3>
+    <form onsubmit="saveEditedAnnouncement(event)">
+      <input id="editAnnouncementIndex" type="hidden">
+      <label>Title</label><input id="editAnnouncementTitle" type="text" required>
+      <label>Message</label><textarea id="editAnnouncementMessage" rows="4" required></textarea>
+      <label>Audience</label>
+      <select id="editAnnouncementAudience">
+        <option>All Students</option>
+        <option>Faculty</option>
+      </select>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button class="btn btn-green" type="submit">Save Changes</button>
+        <button class="btn" type="button" onclick="closeModal('editAnnouncementModal')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="editJobModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Edit Job</h3>
+    <form onsubmit="saveEditedJob(event)">
+      <input id="editJobIndex" type="hidden">
+      <label>Job Title</label><input id="editJobTitle" type="text" required>
+      <label>Company</label><input id="editJobCompany" type="text" required>
+      <label>Location</label><input id="editJobLocation" type="text" placeholder="e.g. Lagos, Abuja, Remote" required>
+      <label>Job Type</label>
+      <select id="editJobType">
+        <option value="Remote">Remote</option>
+        <option value="Office">Office</option>
+        <option value="Hybrid">Hybrid</option>
+      </select>
+      <label>Description</label><textarea id="editJobDescription" rows="3" required></textarea>
+      <label>Requirements</label><textarea id="editJobRequirements" rows="3" placeholder="Add one requirement per line"></textarea>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button class="btn btn-green" type="submit">Save Changes</button>
+        <button class="btn" type="button" onclick="closeModal('editJobModal')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="hostelModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Post Hostel</h3>
+    <form onsubmit="publishHostel(event)">
+      <label>Hostel Name</label><input id="hostelName" type="text" required>
+      <label>Description</label><textarea id="hostelDescription" rows="3" required></textarea>
+      <label>Amount</label>
+      <input id="hostelAmount" type="text" placeholder="₦450k or $2.5k or €1,200" required>
+      <label>Pictures</label><input id="hostelPictures" type="file" accept="image/*" multiple>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button class="btn btn-hostel" type="submit">Post Hostel</button>
+        <button class="btn" type="button" onclick="closeModal('hostelModal')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="editHostelModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div class="card" style="width:500px;">
+    <h3>Edit Hostel</h3>
+    <form onsubmit="saveEditedHostel(event)">
+      <input id="editHostelIndex" type="hidden">
+      <label>Hostel Name</label><input id="editHostelName" type="text" required>
+      <label>Description</label><textarea id="editHostelDescription" rows="3" required></textarea>
+      <label>Amount</label>
+      <input id="editHostelAmount" type="text" placeholder="₦450k or $2.5k or €1,200" required>
+      <label>Pictures</label><input id="editHostelPictures" type="file" accept="image/*" multiple>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button class="btn btn-green" type="submit">Save Changes</button>
+        <button class="btn" type="button" onclick="closeModal('editHostelModal')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    const isClosed = sidebar.classList.toggle("closed");
+    overlay.classList.toggle("active", !isClosed);
+    document.body.classList.toggle("sidebar-open", !isClosed);
+  }
+  
+  function showPage(id, clickEvent) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    if (clickEvent) clickEvent.currentTarget.classList.add('active');
+  }
+  
+  function toggleTheme() {
+    const body = document.body;
+    const theme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    body.setAttribute('data-theme', theme);
+  }
+  
+  function toggleDropdown() {
+    const dd = document.getElementById('profileDropdown');
+    dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+  }
+  
+  function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  function readItems(key) {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  }
+
+  function escapeHtml(value = '') {
+    return String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[character]));
+  }
+
+  function parseFormattedAmount(value) {
+    if (!value || typeof value !== 'string') return { amount: 0, currency: '₦' };
+
+    const trimmed = value.trim();
+    const currencyMatch = trimmed.match(/^([A-Za-z$€£¥₹₦₩₽₫₨₱₴₫₸₺₾₿]{1,5}|[A-Z]{3})/);
+    const currency = currencyMatch ? currencyMatch[1] : '₦';
+
+    let numericPart = trimmed
+      .replace(currency, '')
+      .replace(/,/g, '')
+      .replace(/\s+/g, '')
+      .replace(/k$/i, '000')
+      .replace(/m$/i, '000000')
+      .replace(/b$/i, '000000000');
+
+    numericPart = numericPart.replace(/[^0-9.]/g, '');
+    const parsed = Number(numericPart || 0);
+
+    return {
+      amount: Number.isFinite(parsed) ? parsed : 0,
+      currency
+    };
+  }
+
+  function formatCurrency(amount, currency = '₦') {
+    const amountValue = Number(amount || 0);
+    const currencyLabel = (currency || '₦').trim() || '₦';
+    return `${currencyLabel}${amountValue.toLocaleString()}`;
+  }
+
+  function renderHostelList() {
+    const list = document.getElementById('hostelList');
+    if (!list) return;
+
+    const hostels = readItems('communityHostels');
+
+    if (!hostels.length) {
+      list.innerHTML = '<div class="empty-state">No hostels have been posted yet.</div>';
+      return;
+    }
+
+    list.innerHTML = hostels.map((hostel, index) => `
+      <div class="hostel-row">
+        <div class="hostel-main">
+          <strong>${escapeHtml(hostel.name)}</strong>
+          <span>${escapeHtml(hostel.description)}</span>
+          <small>${escapeHtml(formatCurrency(hostel.amount, hostel.currency))} • ${escapeHtml(hostel.date || 'New')}</small>
+        </div>
+        <div class="hostel-actions">
+          <button class="btn btn-green" type="button" onclick="openEditHostel(${index})">Edit</button>
+          <button class="btn btn-danger" type="button" onclick="deleteHostel(${index})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openEditHostel(index) {
+    const hostels = readItems('communityHostels');
+    const hostel = hostels[index];
+    if (!hostel) return;
+
+    document.getElementById('editHostelIndex').value = index;
+    document.getElementById('editHostelName').value = hostel.name || '';
+    document.getElementById('editHostelDescription').value = hostel.description || '';
+    document.getElementById('editHostelAmount').value = hostel.amountText || formatCurrency(hostel.amount || 0, hostel.currency || '₦');
+    showModal('editHostelModal');
+  }
+
+  function saveEditedHostel(event) {
+    event.preventDefault();
+    const index = Number(document.getElementById('editHostelIndex').value);
+    const hostels = readItems('communityHostels');
+    const hostel = hostels[index];
+    if (!hostel) return;
+
+    hostel.name = document.getElementById('editHostelName').value.trim();
+    hostel.description = document.getElementById('editHostelDescription').value.trim();
+    const parsed = parseFormattedAmount(document.getElementById('editHostelAmount').value);
+    hostel.amount = parsed.amount;
+    hostel.currency = parsed.currency;
+    hostel.amountText = document.getElementById('editHostelAmount').value.trim();
+
+    if (!hostel.name || !hostel.description || !hostel.amount || hostel.amount <= 0) {
+      alert('Please complete all hostel fields before saving.');
+      return;
+    }
+
+    hostels[index] = hostel;
+    localStorage.setItem('communityHostels', JSON.stringify(hostels));
+    renderHostelList();
+    closeModal('editHostelModal');
+    event.target.reset();
+  }
+
+  function deleteHostel(index) {
+    const hostels = readItems('communityHostels');
+    const hostel = hostels[index];
+    if (!hostel) return;
+
+    const confirmDelete = confirm(`Delete ${hostel.name}?`);
+    if (!confirmDelete) return;
+
+    hostels.splice(index, 1);
+    localStorage.setItem('communityHostels', JSON.stringify(hostels));
+    renderHostelList();
+  }
+
+  function publishAnnouncement(event) {
+    event.preventDefault();
+    const announcement = {
+      title: document.getElementById('announcementTitle').value.trim(),
+      message: document.getElementById('announcementMessage').value.trim(),
+      audience: document.getElementById('announcementAudience').value,
+      date: new Date().toLocaleDateString()
+    };
+    const announcements = readItems('communityAnnouncements');
+    announcements.unshift(announcement);
+    localStorage.setItem('communityAnnouncements', JSON.stringify(announcements));
+    renderAdminRows();
+    event.target.reset();
+    closeModal('announceModal');
+  }
+
+  function publishJob(event) {
+    event.preventDefault();
+    const jobs = readItems('communityJobs');
+    const requirements = (document.getElementById('jobRequirements').value || '')
+      .split(/\n+/)
+      .map(item => item.trim())
+      .filter(Boolean);
+
+    jobs.unshift({
+      title: document.getElementById('jobTitle').value.trim(),
+      company: document.getElementById('jobCompany').value.trim(),
+      location: document.getElementById('jobLocation').value.trim() || 'Remote',
+      type: document.getElementById('jobType').value || 'Remote',
+      description: document.getElementById('jobDescription').value.trim(),
+      requirements,
+      date: new Date().toLocaleDateString()
+    });
+    localStorage.setItem('communityJobs', JSON.stringify(jobs));
+    renderAdminRows();
+    event.target.reset();
+    closeModal('jobModal');
+  }
+
+  function publishHostel(event) {
+    event.preventDefault();
+    const pictureInput = document.getElementById('hostelPictures');
+    const hostels = readItems('communityHostels');
+    const amountValue = document.getElementById('hostelAmount').value;
+    const parsed = parseFormattedAmount(amountValue);
+    const hostel = {
+      name: document.getElementById('hostelName').value.trim(),
+      description: document.getElementById('hostelDescription').value.trim(),
+      amount: parsed.amount,
+      currency: parsed.currency,
+      amountText: amountValue.trim(),
+      pictures: [],
+      date: new Date().toLocaleDateString()
+    };
+
+    if (!amountValue || parsed.amount <= 0) {
+      alert('Please enter a valid amount like ₦450k or $2.5k.');
+      return;
+    }
+
+    Promise.all(Array.from(pictureInput.files).map(file => new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    }))).then(pictures => {
+      hostel.pictures = pictures;
+      hostels.unshift(hostel);
+      localStorage.setItem('communityHostels', JSON.stringify(hostels));
+      renderHostelList();
+      event.target.reset();
+      closeModal('hostelModal');
+    });
+  }
+
+  function openEditAnnouncement(index) {
+    const announcements = readItems('communityAnnouncements');
+    const item = announcements[index];
+    if (!item) return;
+
+    document.getElementById('editAnnouncementIndex').value = index;
+    document.getElementById('editAnnouncementTitle').value = item.title || '';
+    document.getElementById('editAnnouncementMessage').value = item.message || '';
+    document.getElementById('editAnnouncementAudience').value = item.audience || 'All Students';
+    showModal('editAnnouncementModal');
+  }
+
+  function saveEditedAnnouncement(event) {
+    event.preventDefault();
+    const index = Number(document.getElementById('editAnnouncementIndex').value);
+    const announcements = readItems('communityAnnouncements');
+    const item = announcements[index];
+    if (!item) return;
+
+    item.title = document.getElementById('editAnnouncementTitle').value.trim();
+    item.message = document.getElementById('editAnnouncementMessage').value.trim();
+    item.audience = document.getElementById('editAnnouncementAudience').value;
+
+    if (!item.title || !item.message) {
+      alert('Please fill in the announcement title and message.');
+      return;
+    }
+
+    localStorage.setItem('communityAnnouncements', JSON.stringify(announcements));
+    renderAdminRows();
+    closeModal('editAnnouncementModal');
+    event.target.reset();
+  }
+
+  function deleteAnnouncement(index) {
+    const announcements = readItems('communityAnnouncements');
+    const item = announcements[index];
+    if (!item) return;
+
+    const confirmDelete = confirm(`Delete announcement "${item.title}"?`);
+    if (!confirmDelete) return;
+
+    announcements.splice(index, 1);
+    localStorage.setItem('communityAnnouncements', JSON.stringify(announcements));
+    renderAdminRows();
+  }
+
+  function openEditJob(index) {
+    const jobs = readItems('communityJobs');
+    const item = jobs[index];
+    if (!item) return;
+
+    document.getElementById('editJobIndex').value = index;
+    document.getElementById('editJobTitle').value = item.title || '';
+    document.getElementById('editJobCompany').value = item.company || '';
+    document.getElementById('editJobLocation').value = item.location || 'Remote';
+    document.getElementById('editJobType').value = item.type || 'Remote';
+    document.getElementById('editJobDescription').value = item.description || '';
+    document.getElementById('editJobRequirements').value = Array.isArray(item.requirements) ? item.requirements.join('\n') : '';
+    showModal('editJobModal');
+  }
+
+  function saveEditedJob(event) {
+    event.preventDefault();
+    const index = Number(document.getElementById('editJobIndex').value);
+    const jobs = readItems('communityJobs');
+    const item = jobs[index];
+    if (!item) return;
+
+    const requirements = (document.getElementById('editJobRequirements').value || '')
+      .split(/\n+/)
+      .map(item => item.trim())
+      .filter(Boolean);
+
+    item.title = document.getElementById('editJobTitle').value.trim();
+    item.company = document.getElementById('editJobCompany').value.trim();
+    item.location = document.getElementById('editJobLocation').value.trim() || 'Remote';
+    item.type = document.getElementById('editJobType').value || 'Remote';
+    item.description = document.getElementById('editJobDescription').value.trim();
+    item.requirements = requirements;
+
+    if (!item.title || !item.company || !item.description) {
+      alert('Please fill in the job details before saving.');
+      return;
+    }
+
+    localStorage.setItem('communityJobs', JSON.stringify(jobs));
+    renderAdminRows();
+    closeModal('editJobModal');
+    event.target.reset();
+  }
+
+  function deleteJob(index) {
+    const jobs = readItems('communityJobs');
+    const item = jobs[index];
+    if (!item) return;
+
+    const confirmDelete = confirm(`Delete job "${item.title}"?`);
+    if (!confirmDelete) return;
+
+    jobs.splice(index, 1);
+    localStorage.setItem('communityJobs', JSON.stringify(jobs));
+    renderAdminRows();
+  }
+
+  function renderAdminRows() {
+    const announcementRows = document.getElementById('announcementRows');
+    const jobRows = document.getElementById('jobRows');
+
+    if (announcementRows) {
+      const savedAnnouncements = readItems('communityAnnouncements');
+      if (!savedAnnouncements.length) {
+        announcementRows.innerHTML = '<tr><td colspan="5">No announcements yet.</td></tr>';
+      } else {
+        announcementRows.innerHTML = savedAnnouncements.map((item, index) => `
+          <tr>
+            <td>${item.title}</td>
+            <td>${item.audience}</td>
+            <td>${item.date}</td>
+            <td>Published</td>
+            <td>
+              <button class="btn btn-green" type="button" onclick="openEditAnnouncement(${index})">Edit</button>
+              <button class="btn btn-danger" type="button" onclick="deleteAnnouncement(${index})">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    if (jobRows) {
+      const savedJobs = readItems('communityJobs');
+      if (!savedJobs.length) {
+        jobRows.innerHTML = '<tr><td colspan="5">No jobs yet.</td></tr>';
+      } else {
+        jobRows.innerHTML = savedJobs.map((item, index) => `
+          <tr>
+            <td>${item.title}</td>
+            <td>${item.company}</td>
+            <td>${item.type || 'Remote'}</td>
+            <td>${item.date}</td>
+            <td>0</td>
+            <td>
+              <button class="btn btn-green" type="button" onclick="openEditJob(${index})">Edit</button>
+              <button class="btn btn-danger" type="button" onclick="deleteJob(${index})">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+  }
+
+  renderAdminRows();
+  renderHostelList();
+</script>
+
+</body>
+</html>

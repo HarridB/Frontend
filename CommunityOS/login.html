@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-green: #123529;
+    --ink-green-deep: #0c261d;
+    --paper: #FAF9F4;
+    --paper-dim: #F1EFE6;
+    --charcoal: #1B1B18;
+    --charcoal-soft: #57584f;
+    --gold: #D9A438;
+    --gold-bright: #EFC15F;
+    --brick: #B5482A;
+    --line: rgba(27,27,24,0.10);
+    --radius: 14px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    font-family:'Inter', sans-serif;
+    color: var(--charcoal);
+    background: var(--ink-green-deep);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 28px;
+  }
+
+  .stage{
+    width:min(940px, 100%);
+    min-height: 600px;
+    display:grid;
+    grid-template-columns: 1.05fr 1fr;
+    background: var(--paper);
+    border-radius: 22px;
+    overflow:hidden;
+    box-shadow: 0 40px 90px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* ---------- Left: directory board ---------- */
+  .board{
+    background:
+      radial-gradient(circle at 15% 10%, rgba(217,164,56,0.10), transparent 45%),
+      var(--ink-green);
+    color: var(--paper);
+    padding: 44px 40px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  .board::after{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border:1px solid rgba(250,249,244,0.14);
+    border-radius: 14px;
+    pointer-events:none;
+  }
+
+  .wordmark{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .wordmark .dot{
+    width:9px; height:9px; border-radius:50%;
+    background: var(--gold-bright);
+    display:inline-block;
+  }
+
+  .tagline{
+    margin-top:6px;
+    font-size: 0.85rem;
+    color: rgba(250,249,244,0.62);
+    letter-spacing: 0.02em;
+  }
+
+  .board-label{
+    margin-top: 46px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(250,249,244,0.5);
+  }
+
+  .directory{
+    margin-top: 14px;
+    display:flex;
+    flex-direction:column;
+    border-top: 1px solid rgba(250,249,244,0.14);
+  }
+
+  .directory-row{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(250,249,244,0.14);
+    cursor:pointer;
+    background:none;
+    border-left: none; border-right: none; border-top: none;
+    color: inherit;
+    font-family: inherit;
+    text-align:left;
+    position:relative;
+  }
+
+  .directory-row .peg{
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(250,249,244,0.28);
+    flex-shrink:0;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .directory-row .rn{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(250,249,244,0.4);
+    width: 22px;
+    flex-shrink:0;
+  }
+
+  .directory-row .rlabel{
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(250,249,244,0.78);
+    transition: color 0.2s ease;
+  }
+
+  .directory-row .rarrow{
+    margin-left:auto;
+    opacity:0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    color: var(--gold-bright);
+    font-size: 0.95rem;
+  }
+
+  .directory-row:hover .rlabel{ color: rgba(250,249,244,0.95); }
+
+  .directory-row[aria-selected="true"] .peg{
+    background: var(--gold-bright);
+    box-shadow: 0 0 0 4px rgba(239,193,95,0.18);
+  }
+  .directory-row[aria-selected="true"] .rlabel{
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .directory-row[aria-selected="true"] .rarrow{
+    opacity:1;
+    transform: translateX(0);
+  }
+
+  .board-foot{
+    margin-top: auto;
+    padding-top: 30px;
+    font-size: 0.78rem;
+    color: rgba(250,249,244,0.42);
+    line-height:1.6;
+  }
+
+  /* ---------- Right: form ---------- */
+  .panel{
+    padding: 48px 44px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  .panel-eyebrow{
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--charcoal-soft);
+  }
+
+  .panel h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-top: 8px;
+    color: var(--charcoal);
+  }
+
+  .panel h1 span{ color: var(--brick); }
+
+  .panel-sub{
+    margin-top:8px;
+    font-size: 0.92rem;
+    color: var(--charcoal-soft);
+  }
+
+  form{ margin-top: 30px; }
+
+  .field{ margin-bottom: 18px; }
+
+  .field label{
+    display:block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 7px;
+  }
+
+  .field input{
+    width:100%;
+    padding: 13px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+    font-family:'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .field input::placeholder{ color: #b3b2a6; }
+
+  .field input:focus,
+  .directory-row:focus-visible,
+  .signup-btn:focus-visible,
+  .login-btn:focus-visible,
+  .forgot-link a:focus-visible{
+    border-color: var(--ink-green);
+    box-shadow: 0 0 0 3px rgba(18,53,41,0.14);
+    outline: 2px solid transparent;
+  }
+
+  .row-between{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom: 22px;
+  }
+
+  .forgot-link a{
+    font-size: 0.85rem;
+    color: var(--charcoal-soft);
+    text-decoration:none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .forgot-link a:hover{
+    color: var(--ink-green);
+    border-bottom-color: var(--ink-green);
+  }
+
+  .login-btn{
+    width:100%;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border:none;
+    background: var(--ink-green);
+    color: var(--paper);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor:pointer;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .login-btn:hover{
+    background: var(--ink-green-deep);
+    box-shadow: 0 14px 30px rgba(18,53,41,0.22);
+    transform: translateY(-1px);
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin: 26px 0 18px;
+  }
+
+  .divider::before, .divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background: var(--line);
+  }
+
+  .divider span{
+    font-size: 0.78rem;
+    color: var(--charcoal-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .signup-btn{
+    width:100%;
+    padding: 13px 18px;
+    border-radius: 10px;
+    border: 1.5px solid var(--ink-green);
+    background: transparent;
+    color: var(--ink-green);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor:pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .signup-btn:hover{
+    background: var(--ink-green);
+    color: var(--paper);
+  }
+
+  @media (max-width: 760px){
+    .stage{
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .board{
+      padding: 32px 28px;
+    }
+    .board-label{ margin-top: 26px; }
+    .board-foot{ display:none; }
+    .panel{ padding: 36px 28px 44px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+
+    <!-- Left: directory board / role picker -->
+    <div class="board">
+      <div class="wordmark"><span class="dot"></span>Student Bridge</div>
+      <div class="tagline">Connect Smart.</div>
+
+      <div class="board-label">Sign in as</div>
+      <div class="directory" id="directory" role="listbox" aria-label="Choose login role">
+        <button type="button" class="directory-row" data-role="student" data-path="student/Dashboard.html" role="option" aria-selected="true">
+          <span class="peg"></span><span class="rn">01</span><span class="rlabel">Student</span><span class="rarrow">→</span>
+        </button>
+        <button type="button" class="directory-row" data-role="admin" data-path="/admin/Dashboard.html" role="option" aria-selected="false">
+          <span class="peg"></span><span class="rn">02</span><span class="rlabel">Admin</span><span class="rarrow">→</span>
+        </button>
+        <button type="button" class="directory-row" data-role="hostel_manager" data-path="hostel-manager.html" role="option" aria-selected="false">
+          <span class="peg"></span><span class="rn">03</span><span class="rlabel">Hostel Manager</span><span class="rarrow">→</span>
+        </button>
+        <!-- <button type="button" class="directory-row" data-role="faculty" data-path="faculty.html" role="option" aria-selected="false">
+          <span class="peg"></span><span class="rn">04</span><span class="rlabel">Faculty</span><span class="rarrow">→</span>
+        </button> -->
+        <button type="button" class="directory-row" data-role="marketplace_manager" data-path="marketplace-manager.html" role="option" aria-selected="false">
+          <span class="peg"></span><span class="rn">04</span><span class="rlabel">Marketplace Manager</span><span class="rarrow">→</span>
+        </button>
+      </div>
+
+      <div class="board-foot">Every building on one board — pick your entry point and sign in on the right.</div>
+    </div>
+
+    <!-- Right: login form -->
+    <div class="panel">
+      <div class="panel-eyebrow">Welcome back</div>
+      <h1>Sign in as <span id="roleDisplay">Student</span></h1>
+      <p class="panel-sub">Enter your credentials to reach your dashboard.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="userName">User name</label>
+          <input type="text" id="userName" placeholder="Enter your user name" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="row-between forgot-link">
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Log in</button>
+      </form>
+
+        <script>
+          // Role selection behavior
+          const directory = document.getElementById('directory');
+          const roleDisplay = document.getElementById('roleDisplay');
+          let selectedRole = 'student';
+
+          directory.addEventListener('click', (e) => {
+            const row = e.target.closest('.directory-row');
+            if (!row) return;
+            // clear selection
+            directory.querySelectorAll('.directory-row').forEach(r => r.setAttribute('aria-selected','false'));
+            row.setAttribute('aria-selected','true');
+            selectedRole = row.dataset.role;
+            roleDisplay.textContent = row.querySelector('.rlabel').textContent;
+          });
+
+          // Login handling (demo client-side)
+          document.getElementById('loginForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const username = document.getElementById('userName').value.trim();
+            const password = document.getElementById('password').value;
+
+            // If role is admin, redirect to admin dashboard
+              if (selectedRole === 'admin') {
+                window.location.href = 'admin/Dashboard.html';
+                return;
+              }
+
+            // For student role redirect to student dashboard (existing file)
+            if (selectedRole === 'student') {
+              window.location.href = 'student/Dashboard.html';
+              return;
+            }
+
+            // Default fallback — stay on page
+            alert('Logged in as ' + selectedRole + ' (demo).');
+          });
+        </script>
+
+      <div class="divider"><span>Or</span></div>
+
+      <form action="signup.html">
+        <button type="submit" class="signup-btn">Create an account</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    const directory = document.getElementById('directory');
+    const roleDisplay = document.getElementById('roleDisplay');
+    let selectedPath = 'student/Dashboard.html';
+
+    directory.querySelectorAll('.directory-row').forEach(row => {
+      row.addEventListener('click', () => {
+        directory.querySelectorAll('.directory-row').forEach(r => r.setAttribute('aria-selected', 'false'));
+        row.setAttribute('aria-selected', 'true');
+        selectedPath = row.dataset.path;
+        roleDisplay.textContent = row.querySelector('.rlabel').textContent;
+      });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      window.location.href = selectedPath;
+    });
+  </script>
+
+</body>
+</html>

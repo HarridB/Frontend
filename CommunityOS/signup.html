@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: comic sans, ms;
+        }
+
+        body{
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, lightblue 0%, darkgray 45%, black 100%);
+        }
+
+        .signup-container{
+            width: min(420px, 92vw);
+            background: white rgba(255, 255, 255, 0.96);
+            padding: 38px 32px 28px;
+            border-radius: 22px;
+            box-shadow: 0 28px 70px rgba(20, 28, 70, 0.18);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .signup-container h1{
+            font-size: 1.85rem;
+            margin-bottom: 4px;
+            color: black;
+        }
+
+        .signup-container .tag-line{
+            color: #5f5f82;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+    
+
+        .signup-container h2{
+            font-size: 1.2rem;
+            margin: 0 0 22px;
+            color: #3929a5;
+        }
+
+        .input-group input{
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(58, 54, 92, 0.14);
+            background: white;
+            font-size: 0.98rem;
+            color: #2a2a45;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn{
+            width: 50%;
+            justify-content: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            margin: 16px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #7c5cff 0%, #5b3bfc 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover{
+            background: white;
+        }
+
+        .form-control{
+            margin-bottom: 12px;
+        }
+
+        .login-btn{
+            background: rgb(106, 106, 238);
+            border-radius: 12px;
+            gap: 5px;
+        }
+    </style>
+    </head>
+    <title>Campus</title>
+    <body>
+        <div class="signup-container">
+            <h3 class="tag-line mb-4">Fill the form to sign up</h3>
+                <form>
+                <label>Name
+                <input type="text" class="form-control" placeholder="First name">
+                
+                <input type="text" class="form-control" placeholder="Last name">
+                </label>
+
+                <label>E-mail/Phone number
+                <input type="text" class="form-control" placeholder="E-mail or Phone number">
+                </label>
+
+                <label>Name of Institution
+                <input type="text" class="form-control" placeholder="Name of institution">
+                </label>
+
+                <label>Faculty
+                <input type="text" class="form-control" placeholder="Faculty">
+                </label>
+
+                <label>User Name
+                <input type="text" class="form-control" placeholder="User Name">
+                </label>
+
+                <label>Password
+                    <input type="lock" class="form-control" placeholder="Password">
+                
+                    <input type="lock" class="form-control" placeholder="Confirm password">
+                </label>
+                </form>
+                <button class="btn">Signup</button>
+
+                <hr>
+                Already have an account
+                <form action="login.html">
+                    <button class="login-btn">
+                        Login
+                    </button>
+                </form>
+        </div>
+    </body>
+</html>

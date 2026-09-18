@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+        <title>Hostel</title>
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            body{
+               margin: 0;
+               background: #f5f6fa;
+               font-family: Helvetica, Arial, sans-serif;
+            }
+
+            .nav-brand-name{
+                background: midnightblue;
+                width: 100%;
+                height: 10vh;
+                min-height: 65px;
+                color: white;
+
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 10px 20px;
+
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+
+            .menu-btn{
+                border: none;
+                background: transparent;
+                color: white;
+                font-size: 35px;
+                cursor: pointer;
+            }
+
+            .menu-btn:hover{
+                background: #777;
+                color: white;
+            }
+
+            .nav-left{
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                min-width: 0;
+            }
+
+            .logo-img{
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                flex-shrink: 0;
+            }
+
+            .logo-text{
+                color: white;
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin: 0;
+                white-space: nowrap;
+            }
+
+            .text{
+                display: flex;
+                flex: 1;
+                justify-content: space-between;
+                max-width: 400px;
+                height: 4vh;
+                margin-left: auto;
+                border-radius: 10px;
+                font-size: 1rem;
+                color: black;
+                padding: 0 12px;
+                border: 1px solid rgba(255,255,255,0.4);
+            }
+
+            .btn{
+                border-radius: 8px;
+            }
+
+            .btn:hover{
+                background: #777;
+                color: white;
+            }
+
+            .sidebar{
+                background: linear-gradient(rgb(38, 38, 70), rgb(83, 44, 44));
+                position:fixed;
+                box-sizing: border-box;
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                margin: auto;
+                width: 220px;
+                height: 50vh;
+                top: 90px;
+                left: -9px;
+                transform: translateX(-110%);
+                transition: transform 0.25s ease;
+                z-index: 1100;
+                gap: 15px;
+            }
+
+            .sidebar-overlay{
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.4);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+                z-index: 1050;
+            }
+            .sidebar-overlay.active{
+                opacity: 1;
+                visibility: visible;
+                transition-delay: 0s;
+            }
+            .sidebar a.button{ padding: 12px 18px; }
+
+            .button{
+                display: inline-block;
+                height: 22vh;
+                color: white;
+                text-decoration: none;
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.2s ease;
+            }
+
+            .hostel-container{
+                max-width: 1200px;
+                margin: 30px auto;
+                padding: 25px 20px 40px;
+            }
+
+            .card-container{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 24px;
+            }
+
+            .hostel-card{
+                background: #fff;
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+                border: 1px solid rgba(15, 23, 42, 0.06);
+            }
+
+            .hostel-image {
+                width: 100%;
+                height: 230px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .hostel-info {
+                padding: 18px 18px 14px;
+            }
+
+            .hostel-info h4 {
+                margin: 0 0 12px;
+                color: #1e293b;
+                font-size: 1.3rem;
+            }
+
+            .hostel-info p {
+                margin: 0 0 16px;
+                color: #475569;
+                line-height: 1.6;
+            }
+
+            .price-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 14px;
+            }
+
+            .price-row h5 {
+                margin: 0;
+                font-size: 1.3rem;
+                color: #0f172a;
+            }
+
+            .price-row small {
+                color: #64748b;
+                font-size: 0.82rem;
+            }
+
+            .action-row {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .booking-btn,
+            .contact-btn {
+                border: none;
+                border-radius: 10px;
+                padding: 10px 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: 0.2s ease;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .booking-btn {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: white;
+                flex: 1;
+            }
+
+            .contact-btn {
+                background: #e0f2fe;
+                color: #0f172a;
+                flex: 1;
+            }
+
+            .booking-btn:hover,
+            .contact-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+            }
+
+            .manager-card {
+                margin-top: 30px;
+                background: linear-gradient(135deg, #eff6ff, #f8fafc);
+                border: 1px solid rgba(59, 130, 246, 0.15);
+                border-radius: 18px;
+                padding: 22px 20px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+            }
+
+            .manager-card h3 {
+                margin: 0 0 6px;
+                color: #0f172a;
+            }
+
+            .manager-card p {
+                margin: 0;
+                color: #475569;
+            }
+
+            .manager-contact {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #fff;
+                padding: 12px 16px;
+                border-radius: 12px;
+                box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+            }
+
+            .manager-avatar {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #60a5fa, #1d4ed8);
+                display: grid;
+                place-items: center;
+                color: white;
+                font-weight: 700;
+            }
+
+            .payment-modal {
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.6);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                z-index: 2000;
+            }
+
+            .payment-modal.show {
+                display: flex;
+            }
+
+            .payment-panel {
+                width: min(560px, 100%);
+                background: #fff;
+                border-radius: 22px;
+                box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+                padding: 24px 22px 18px;
+                position: relative;
+            }
+
+            .close-modal {
+                position: absolute;
+                right: 18px;
+                top: 14px;
+                border: none;
+                background: #f1f5f9;
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 1.3rem;
+                color: #1e293b;
+            }
+
+            .payment-panel h3 {
+                margin: 0 0 8px;
+                color: #0f172a;
+                font-size: 1.6rem;
+            }
+
+            .payment-panel p {
+                margin: 0 0 20px;
+                color: #475569;
+            }
+
+            .booking-summary {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 12px 14px;
+                margin-bottom: 18px;
+                color: #0f172a;
+            }
+
+            .booking-summary strong {
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .payment-option-list {
+                display: grid;
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+
+            .payment-option {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 14px 14px;
+                border: 1px solid #dbeafe;
+                border-radius: 14px;
+                background: #f8fbff;
+                cursor: pointer;
+                transition: 0.2s ease;
+            }
+
+            .payment-option:hover {
+                border-color: #93c5fd;
+            }
+
+            .payment-option input {
+                margin-top: 4px;
+                accent-color: #2563eb;
+            }
+
+            .payment-option strong {
+                display: block;
+                color: #0f172a;
+                margin-bottom: 3px;
+            }
+
+            .payment-option small {
+                display: block;
+                color: #475569;
+                line-height: 1.5;
+            }
+
+            .payment-details {
+                background: #eff6ff;
+                border: 1px solid #bfdbfe;
+                border-radius: 14px;
+                padding: 14px;
+                color: #1e3a8a;
+                line-height: 1.6;
+                margin-bottom: 18px;
+            }
+
+            .payment-details strong {
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            .card-form {
+                display: grid;
+                gap: 12px;
+                margin-top: 10px;
+            }
+
+            .form-row {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .field-group {
+                display: grid;
+                gap: 6px;
+            }
+
+            .field-group label {
+                font-size: 0.82rem;
+                color: #1e3a8a;
+                font-weight: 700;
+            }
+
+            .field-group input {
+                width: 100%;
+                border: 1px solid #bfdbfe;
+                border-radius: 10px;
+                padding: 10px 12px;
+                outline: none;
+                background: #fff;
+                color: #0f172a;
+            }
+
+            .field-group input:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            }
+
+            .otp-note {
+                margin-top: 10px;
+                padding: 10px 12px;
+                border-radius: 10px;
+                background: #ecfeff;
+                color: #0f172a;
+                border: 1px solid #a5f3fc;
+            }
+
+            .payment-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .secondary-btn,
+            .primary-btn {
+                border: none;
+                border-radius: 10px;
+                padding: 11px 18px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: 0.2s ease;
+            }
+
+            .secondary-btn {
+                background: #e2e8f0;
+                color: #0f172a;
+            }
+
+            .primary-btn {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: white;
+            }
+
+            .secondary-btn:hover,
+            .primary-btn:hover {
+                transform: translateY(-1px);
+            }
+
+            @media (max-width: 768px) {
+                .nav-brand-name {
+                    gap: 10px;
+                    padding: 10px 12px;
+                }
+
+                .text {
+                    max-width: 220px;
+                    font-size: 0.9rem;
+                }
+
+                .sidebar {
+                    width: 78%;
+                    max-width: 260px;
+                }
+            }
+
+            @media (max-width: 560px) {
+                .nav-brand-name {
+                    flex-wrap: wrap;
+                    height: auto;
+                    min-height: 72px;
+                    padding: 10px 12px;
+                }
+
+                .menu-btn {
+                    font-size: 28px;
+                }
+
+                .logo {
+                    width: 38px;
+                    height: 38px;
+                }
+
+                .text {
+                    order: 3;
+                    width: 100%;
+                    max-width: none;
+                    min-width: 0;
+                    margin-left: 0;
+                    flex-basis: 100%;
+                }
+
+                .btn {
+                    padding: 8px 12px;
+                    font-size: 0.9rem;
+                }
+
+                .card-container {
+                    grid-template-columns: 1fr;
+                }
+
+                .action-row {
+                    flex-direction: column;
+                }
+
+                .booking-btn,
+                .contact-btn {
+                    width: 100%;
+                }
+
+                .manager-card {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+
+            @media (max-width: 420px) {
+                .hostel-container {
+                    padding-left: 12px;
+                    padding-right: 12px;
+                }
+
+                .hostel-image {
+                    height: 200px;
+                }
+
+                .hostel-info {
+                    padding: 14px 12px 12px;
+                }
+
+                .hostel-info h4 {
+                    font-size: 1.1rem;
+                }
+
+                .manager-card {
+                    padding: 18px 14px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navbar -->
+         <nav class="nav-brand-name">
+            <div class="nav-left">
+                <button class="menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <img src="../images/StudentBridge.png" class="logo-img" alt="logo">
+                <h3 class="logo-text">Student Bridge</h3>
+            </div>
+
+            <input id="hostelSearchInput" class="text" type="text" placeholder="Search by location or room type" aria-label="Search hostels">
+            <button id="hostelSearchBtn" class="btn btn-primary" type="button">Search</button>
+         </nav>
+
+         <!--Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+       <div class="sidebar" id="sidebar">
+         <a href="Dashboard.html" class="button">
+            <i class="fas fa-home"></i>
+            Dashboard
+        </a>
+
+        <a href="" class="button">
+            <i class="far fa-comment"></i>
+            Complaint
+        </a>
+
+        <a href="" class="button">
+            <i class="fas fa-wrench"></i>
+            maintenance
+        </a>
+       </div>
+       
+       <!-- Hostel Card -->
+         <div class="hostel-container">
+<h3 id="hostelSectionTitle" style="margin-bottom: 20px; color: #1e293b;">Hostel Available In Alihame</h3>
+            <div class="card-container" id="hostelCards">
+
+            <div class="hostel-card" data-location="Alihame" data-type="single room">
+                <img class="hostel-image" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" alt="Hostel room">
+                <div class="hostel-info">
+                    <h4>Sunrise Hostel</h4>
+                    <p>Affordable single room hostel close to the main campus, with clean rooms and steady water supply.</p>
+                    <div class="price-row">
+                        <h5>₦400k</h5>
+                        <small>Location: Alihame • Renew: ₦350k</small>
+                    </div>
+                    <div class="action-row">
+                        <button class="booking-btn">Book Now</button>
+                        <a href="tel:+2347045377705" class="contact-btn"><i class="fas fa-phone"></i>Call</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hostel-card" data-location="Alihame" data-type="2bedroom flat">
+                <img class="hostel-image" src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80" alt="Hostel building">
+                <div class="hostel-info">
+                    <h4>Campus View Lodge</h4>
+                    <p>Comfortable 2-bedroom flat style accommodation opposite the VC lodge, with good security and quiet surroundings.</p>
+                    <div class="price-row">
+                        <h5>₦500k</h5>
+                        <small>Location: Alihame • Renew: ₦450k</small>
+                    </div>
+                    <div class="action-row">
+                        <button class="booking-btn">Book Now</button>
+                        <a href="tel:+2347045377705" class="contact-btn"><i class="fas fa-phone"></i>Call</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hostel-card" data-location="Owa-Alero" data-type="single room">
+                <img class="hostel-image" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Hostel room interior">
+                <div class="hostel-info">
+                    <h4>Owa Alero Homes</h4>
+                    <p>On-campus single room hostel with a fenced environment, comfortable beds, and great ventilation.</p>
+                    <div class="price-row">
+                        <h5>₦60k</h5>
+                        <small>Location: Owa-Alero • Available now</small>
+                    </div>
+                    <div class="action-row">
+                        <button class="booking-btn">Book Now</button>
+                        <a href="tel:+2347045377705" class="contact-btn"><i class="fas fa-phone"></i>Call</a>
+                    </div>
+                </div>
+            </div>
+
+           </div>
+
+           <div class="manager-card">
+             <div>
+               <h3>Contact Hostel Manager</h3>
+               <p>Joshua Nnakude
+                 <br>CMP2307633 • Hostel Allocation Desk</p>
+             </div>
+             <div class="manager-contact">
+               <div class="manager-avatar">EA</div>
+               <div>
+                 <strong>+234 704 537 7705</strong><br>
+                 <small>Available Mon - Sat, 8:00am - 6:00pm</small>
+               </div>
+             </div>
+           </div>
+         </div>
+
+         <div class="payment-modal" id="paymentModal" aria-hidden="true">
+            <div class="payment-panel" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+                <button class="close-modal" type="button" aria-label="Close payment modal">&times;</button>
+                <h3 id="paymentTitle">Choose payment method</h3>
+                <p>Complete your hostel booking securely</p>
+
+                <div class="booking-summary" id="bookingSummary">
+                    <strong>Hostel: </strong>
+                    <span id="bookingHostelName">Sunrise Hostel</span><br>
+                    <span id="bookingAmount">₦400,000</span>
+                </div>
+
+                <div class="payment-option-list">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="transfer" checked>
+                        <span>
+                            <strong>Pay with transfer</strong>
+                            <small>Transfer directly to the school or hostel account.</small>
+                        </span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="card">
+                        <span>
+                            <strong>Pay with ATM card</strong>
+                            <small>Use your debit or credit card for instant payment.</small>
+                        </span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="ussd">
+                        <span>
+                            <strong>Pay with USSD</strong>
+                            <small>Complete payment using your mobile banking USSD code.</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="payment-details" id="paymentDetails"></div>
+
+                <div class="payment-actions">
+                    <button class="secondary-btn" type="button" id="cancelPaymentBtn">Cancel</button>
+                    <button class="primary-btn" type="button" id="confirmBookingBtn">Continue</button>
+                </div>
+            </div>
+         </div>
+
+
+        <script>
+            function escapeText(value) {
+                return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'}[character]));
+            }
+
+            function renderPostedHostels() {
+                const container = document.getElementById('hostelCards');
+                const hostels = JSON.parse(localStorage.getItem('communityHostels') || '[]');
+                hostels.forEach(hostel => {
+                    const card = document.createElement('div');
+                    const locationText = hostel.location || hostel.name || 'Campus';
+                    const roomType = hostel.roomType || (hostel.description && hostel.description.toLowerCase().includes('flat') ? '2bedroom flat' : 'single room');
+                    card.className = 'hostel-card';
+                    card.setAttribute('data-location', locationText);
+                    card.setAttribute('data-type', roomType);
+                    const image = hostel.pictures && hostel.pictures[0] ? `<img class="hostel-image" src="${hostel.pictures[0]}" alt="${escapeText(hostel.name)}">` : '<div class="hostel-image" style="background:#dbeafe; display:flex; align-items:center; justify-content:center;"><i class="fas fa-house fa-3x" style="color:#1e3a8a;"></i></div>';
+                    card.innerHTML = `${image}
+                        <div class="hostel-info"><h4>${escapeText(hostel.name)}</h4><p>${escapeText(hostel.description)}</p>
+                        <div class="price-row"><h5>${escapeText(hostel.currency || '₦')}${Number(hostel.amount || 0).toLocaleString()}</h5><small>Location: ${escapeText(locationText)} • Posted ${escapeText(hostel.date)}</small></div>
+                        <div class="action-row"><button class="booking-btn">Book Now</button><a href="tel:+2347045377705" class="contact-btn"><i class="fas fa-phone"></i>Call</a></div></div>`;
+                    container.prepend(card);
+                });
+            }
+
+            function performHostelSearch() {
+                const input = document.getElementById('hostelSearchInput');
+                const query = (input ? input.value : '').trim().toLowerCase();
+                const allCards = document.querySelectorAll('.hostel-card');
+                let visibleCount = 0;
+
+                allCards.forEach(card => {
+                    const location = (card.dataset.location || '').toLowerCase();
+                    const roomType = (card.dataset.type || '').toLowerCase();
+                    const text = `${card.textContent}`.toLowerCase();
+                    const matches = !query || location.includes(query) || roomType.includes(query) || text.includes(query);
+                    card.style.display = matches ? '' : 'none';
+                    if (matches) visibleCount++;
+                });
+
+                const heading = document.getElementById('hostelSectionTitle');
+                if (heading) {
+                    heading.textContent = query ? `Search Results for "${input.value.trim()}" (${visibleCount})` : 'Hostel Available In Alihame';
+                }
+
+                if (!visibleCount) {
+                    const emptyState = document.getElementById('hostelEmptyState');
+                    if (emptyState) {
+                        emptyState.style.display = 'block';
+                    } else {
+                        const empty = document.createElement('div');
+                        empty.id = 'hostelEmptyState';
+                        empty.className = 'empty-state';
+                        empty.textContent = 'No hostel matches your search. Try Alihame, Owa-Alero, single room, or 2bedroom flat.';
+                        document.getElementById('hostelCards').appendChild(empty);
+                    }
+                } else {
+                    const emptyState = document.getElementById('hostelEmptyState');
+                    if (emptyState) emptyState.style.display = 'none';
+                }
+            }
+
+            const paymentModal = document.getElementById('paymentModal');
+            const bookingHostelName = document.getElementById('bookingHostelName');
+            const bookingAmount = document.getElementById('bookingAmount');
+            const paymentDetails = document.getElementById('paymentDetails');
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+
+            function setPaymentButtonText(text) {
+                confirmBookingBtn.textContent = text;
+            }
+
+            function updatePaymentDetails() {
+                const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'transfer';
+                const amount = bookingAmount.textContent || '₦0';
+
+                if (selectedMethod === 'transfer') {
+                    setPaymentButtonText('Continue');
+                    paymentDetails.innerHTML = `<strong>Bank Transfer</strong>Bank: UBA Bank<br>Account Name: Student Hostel Booking<br>Account Number: 2185642715<br>Reference: ${bookingHostelName.textContent.trim()}-${Date.now().toString().slice(-6)}<br>Amount: ${amount}`;
+                } else if (selectedMethod === 'card') {
+                    setPaymentButtonText('Authorize Card');
+                    paymentDetails.innerHTML = `
+                        <strong>ATM Card Payment</strong>
+                        <div class="card-form">
+                            <div class="field-group">
+                                <label>Cardholder name</label>
+                                <input type="text" id="cardName" placeholder="Full name on card" autocomplete="cc-name">
+                            </div>
+                            <div class="field-group">
+                                <label>Card number</label>
+                                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" autocomplete="cc-number">
+                            </div>
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Expiry</label>
+                                    <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" autocomplete="cc-exp">
+                                </div>
+                                <div class="field-group">
+                                    <label>CVV</label>
+                                    <input type="password" id="cardCvv" placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="otp-note">Your card will be validated securely before the OTP confirmation step.</div>
+                    `;
+                } else {
+                    setPaymentButtonText('Continue');
+                    paymentDetails.innerHTML = `<strong>USSD Payment</strong>Dial *737# or your bank USSD code and select the hostel booking option.<br>Reference: ${bookingHostelName.textContent.trim()}-${Date.now().toString().slice(-6)}<br>Amount: ${amount}`;
+                }
+            }
+
+            function formatCardNumber(value) {
+                return value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+            }
+
+            function formatExpiry(value) {
+                const digits = value.replace(/\D/g, '').slice(0, 4);
+                if (digits.length <= 2) return digits;
+                return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+            }
+
+            function showOtpStep() {
+                paymentDetails.innerHTML = `
+                    <strong>OTP Verification</strong>
+                    <div class="field-group">
+                        <label>Enter the 6-digit OTP sent to your phone</label>
+                        <input type="text" id="otpInput" placeholder="123456" maxlength="6" inputmode="numeric">
+                    </div>
+                    <div class="otp-note">Authorization successful. Please confirm the OTP to complete the booking.</div>
+                `;
+                setPaymentButtonText('Confirm OTP');
+            }
+
+            function handleCardAuthorization() {
+                const name = document.getElementById('cardName')?.value.trim();
+                const number = document.getElementById('cardNumber')?.value.replace(/\s/g, '');
+                const expiry = document.getElementById('cardExpiry')?.value.trim();
+                const cvv = document.getElementById('cardCvv')?.value.trim();
+
+                if (!name || !number || number.length < 16 || !expiry || !cvv) {
+                    alert('Please enter all card details correctly before authorization.');
+                    return;
+                }
+
+                alert('Card authorization successful. A one-time password (OTP) has been sent to your phone.');
+                showOtpStep();
+            }
+
+            function handleOtpConfirmation() {
+                const otp = document.getElementById('otpInput')?.value.trim();
+                if (!otp || otp.length !== 6) {
+                    alert('Please enter the 6-digit OTP to complete your booking.');
+                    return;
+                }
+
+                const selected = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'transfer';
+                const hostelName = bookingHostelName.textContent.trim();
+                const amount = bookingAmount.textContent.trim();
+                const booking = { hostelName, amount, method: selected, date: new Date().toLocaleString() };
+                const bookings = JSON.parse(localStorage.getItem('communityBookings') || '[]');
+                bookings.unshift(booking);
+                localStorage.setItem('communityBookings', JSON.stringify(bookings));
+
+                alert(`Booking confirmed for ${hostelName} using ${selected === 'card' ? 'ATM Card' : selected === 'transfer' ? 'Transfer' : 'USSD'}.`);
+                closePaymentModal();
+            }
+
+            function openPaymentModal(hostelName, amountText) {
+                bookingHostelName.textContent = hostelName;
+                bookingAmount.textContent = amountText;
+                updatePaymentDetails();
+                paymentModal.classList.add('show');
+                paymentModal.setAttribute('aria-hidden', 'false');
+            }
+
+            function closePaymentModal() {
+                paymentModal.classList.remove('show');
+                paymentModal.setAttribute('aria-hidden', 'true');
+            }
+
+            document.addEventListener('click', function(event) {
+                const bookingBtn = event.target.closest('.booking-btn');
+                if (bookingBtn) {
+                    const card = bookingBtn.closest('.hostel-card');
+                    const hostelName = card?.querySelector('h4')?.textContent?.trim() || 'Selected Hostel';
+                    const amountText = card?.querySelector('.price-row h5')?.textContent?.trim() || '₦0';
+                    openPaymentModal(hostelName, amountText);
+                }
+
+                if (event.target.closest('.close-modal') || event.target.closest('#cancelPaymentBtn')) {
+                    closePaymentModal();
+                }
+
+                if (event.target.closest('#confirmBookingBtn')) {
+                    const selected = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'transfer';
+                    if (selected === 'card') {
+                        const otpVisible = document.getElementById('otpInput');
+                        if (otpVisible) {
+                            handleOtpConfirmation();
+                        } else {
+                            handleCardAuthorization();
+                        }
+                        return;
+                    }
+
+                    const hostelName = bookingHostelName.textContent.trim();
+                    const amount = bookingAmount.textContent.trim();
+                    const booking = { hostelName, amount, method: selected, date: new Date().toLocaleString() };
+                    const bookings = JSON.parse(localStorage.getItem('communityBookings') || '[]');
+                    bookings.unshift(booking);
+                    localStorage.setItem('communityBookings', JSON.stringify(bookings));
+                    alert(`Your hostel booking for ${hostelName} has been initiated via ${selected === 'transfer' ? 'Transfer' : 'USSD'}.`);
+                    closePaymentModal();
+                }
+            });
+
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.addEventListener('change', updatePaymentDetails);
+            });
+
+            document.addEventListener('input', function(event) {
+                if (event.target && event.target.id === 'cardNumber') {
+                    event.target.value = formatCardNumber(event.target.value);
+                }
+
+                if (event.target && event.target.id === 'cardExpiry') {
+                    event.target.value = formatExpiry(event.target.value);
+                }
+            });
+
+            // Show/hide sidebar and overlay
+            function toggleSidebar() {
+                const sidebar = document.getElementById("sidebar");
+                const overlay = document.getElementById("sidebarOverlay");
+                if (!sidebar || !overlay) return;
+                const isOpen = sidebar.classList.toggle("active");
+                // use transform-based visibility for the sidebar
+                if (isOpen) {
+                    sidebar.style.transform = "translateX(0)";
+                    overlay.classList.add("active");
+                } else {
+                    sidebar.style.transform = "translateX(-110%)";
+                    overlay.classList.remove("active");
+                }
+            }
+            // ensure initial state is hidden
+            document.addEventListener('DOMContentLoaded', function(){
+                const sidebar = document.getElementById("sidebar");
+                const overlay = document.getElementById("sidebarOverlay");
+                if (sidebar) sidebar.style.transform = "translateX(-110%)";
+                if (overlay) overlay.classList.remove("active");
+                renderPostedHostels();
+                updatePaymentDetails();
+
+                const searchInput = document.getElementById('hostelSearchInput');
+                const searchBtn = document.getElementById('hostelSearchBtn');
+                if (searchInput) {
+                    searchInput.addEventListener('input', performHostelSearch);
+                    searchInput.addEventListener('keydown', function (event) {
+                        if (event.key === 'Enter') performHostelSearch();
+                    });
+                }
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', performHostelSearch);
+                }
+            });
+         </script>
+    </body>
+</html>

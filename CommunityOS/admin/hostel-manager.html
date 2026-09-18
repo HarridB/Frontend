@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Hostel Manager</title>
+		<link rel="stylesheet" href="../bootstrap/bootstrap.min.css" />
+		<style>
+			body { padding-top: 70px; }
+			.notifications { max-height: 300px; overflow:auto; }
+			.hostel-row { display:flex; justify-content:space-between; align-items:center; }
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">Hostel Manager</a>
+				<div class="collapse navbar-collapse">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item"><a class="nav-link" href="Dasboard.html">Back to Admin</a></li>
+						<li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<main class="container mt-4">
+			<div class="row">
+				<div class="col-lg-7">
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5>Create Hostel</h5>
+							<form id="hostelForm" class="row g-2">
+								<div class="col-8">
+									<input class="form-control" id="hostelName" placeholder="Hostel name" required />
+								</div>
+								<div class="col-4">
+									<input class="form-control" id="hostelPrice" placeholder="Price" required />
+								</div>
+								<div class="col-12 text-end mt-2">
+									<button class="btn btn-primary" type="submit">Post Hostel</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-body">
+							<h5>Hostels</h5>
+							<div id="hostelsList">
+								<div class="text-muted">No hostels yet.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-5">
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5>Notifications</h5>
+							<div id="notifications" class="notifications mt-2">
+								<div class="text-muted">No notifications.</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-body">
+							<h6>Actions</h6>
+							<button class="btn btn-sm btn-outline-secondary" id="clearNotifications">Clear</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<script src="../bootstrap/js/bootstrap.bundle.js"></script>
+		<script>
+			const hostels = [];
+			const notifications = [];
+
+			const hostelsList = document.getElementById('hostelsList');
+			const notificationsEl = document.getElementById('notifications');
+
+			function renderHostels(){
+				if (hostels.length === 0) {
+					hostelsList.innerHTML = '<div class="text-muted">No hostels yet.</div>';
+					return;
+				}
+				hostelsList.innerHTML = '';
+				hostels.forEach((h, idx) => {
+					const el = document.createElement('div');
+					el.className = 'card p-2 mb-2 hostel-row';
+					el.innerHTML = `<div><strong>${h.name}</strong><div class="small text-muted">${h.price}</div></div><div><button class="btn btn-sm btn-outline-danger" data-idx="${idx}">Remove</button></div>`;
+					hostelsList.appendChild(el);
+				});
+			}
+
+			function renderNotifications(){
+				if (notifications.length === 0) {
+					notificationsEl.innerHTML = '<div class="text-muted">No notifications.</div>';
+					return;
+				}
+				notificationsEl.innerHTML = '';
+				notifications.slice().reverse().forEach(n => {
+					const el = document.createElement('div');
+					el.className = 'card mb-2';
+					el.innerHTML = `<div class="card-body"><p class="mb-1">${n}</p><small class="text-muted">${new Date().toLocaleString()}</small></div>`;
+					notificationsEl.appendChild(el);
+				});
+			}
+
+			document.getElementById('hostelForm').addEventListener('submit', function(e){
+				e.preventDefault();
+				const name = document.getElementById('hostelName').value.trim();
+				const price = document.getElementById('hostelPrice').value.trim();
+				if (!name || !price) return;
+				hostels.push({ name, price });
+				notifications.push(`Hostel posted: ${name} — ${price}`);
+				renderHostels();
+				renderNotifications();
+				this.reset();
+			});
+
+			hostelsList.addEventListener('click', function(e){
+				const btn = e.target.closest('button');
+				if (!btn) return;
+				const idx = Number(btn.dataset.idx);
+				if (Number.isFinite(idx)) {
+					const removed = hostels.splice(idx,1)[0];
+					notifications.push(`Hostel removed: ${removed.name}`);
+					renderHostels();
+					renderNotifications();
+				}
+			});
+
+			document.getElementById('clearNotifications').addEventListener('click', function(){
+				notifications.length = 0;
+				renderNotifications();
+			});
+
+			document.getElementById('logoutBtn').addEventListener('click', function(){
+				alert('Logged out (placeholder)');
+			});
+
+			// initial render
+			renderHostels();
+			renderNotifications();
+		</script>
+	</body>
+</html>
+
